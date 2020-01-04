@@ -9,6 +9,13 @@ MATLAB functionality assumes you have MATLAB set up to run Python code.  See:
 
 In the examples below, replace my IP address (192.168.1.12) with your IP address.
 
+Files:
+
+* ```matlab_udp.py``` contains the module.  No other files needed to use the module.
+* ```udp_send.py``` is a Python script that uses the module to send a UDP message in Python or  terminal command line.
+* ```udp_rx.py``` is a Python script that uses the module to receive a UDP message in Python or terminal command line.
+
+
 ## Sending UDP with ```matlab_udp``` Module
 
 Use the module's ```send()``` function to send a message via UDP to a specified IP and port.
