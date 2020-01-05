@@ -41,7 +41,7 @@ This message can be received in Linux using netcat to listen:
 
 Use the module's ```receive()``` function to receive a message via UDP from a specified port.
 
-The function will block until a UDP message is received.
+The function will block until a UDP message is received (unless a timeout is specified).
 
 The function returns the message, IP address of sender, and port of sender.
 
@@ -56,23 +56,26 @@ Then, send a message from a Linux terminal using:
 
 The msg variable contains the message:
 
-    >> msg
     msg = 
-          Python tuple with no properties.
-        ('Hello\n', '192.168.1.12', 47185.0)
-    >> char(msg{1})
+      Python dict with no properties.
+        {'msg': 'Hello\n', 'sender_ip': '192.168.1.12', 'sender_port': 44155.0, 'timeout_occurred': False, 'timeout_sec': 0.0}
+    
+    >> char(msg{'msg'})
     ans =
         'Hello
-         '
-    >> char(msg{1}(1:end-1))
+         '        
+
+    >> char(msg{'msg'}(1:end-1))
     ans =
         'Hello'
-    >> char(msg{2})
+
+    >> char(msg{'sender_ip'})
     ans =
         '192.168.1.12'
-    >> msg{3}
+    
+    >> msg{'sender_port'}
     ans =
-           47185    
+           44155    
     
  Note that ```nc``` sends an end-of-line, so the message string has an end-of-line.  This module's ```send()``` function does not send the end-of-line.
     
@@ -88,8 +91,28 @@ Then, send a message using:
 
 Python will show:
     
-    (u'Hello\n', '192.168.1.12', 47185.0)
+    {'msg': 'world\n', 'sender_ip': '192.168.1.12', 'sender_port': 44155.0, 'timeout_occurred': False, 'timeout_sec': 0.0}
 
+A timeout can be specified for receiving.  After the timeout, the function returns and indicates a timeout in the returned values.  Specifying zero for the optional timeout paramter means no timeout -- wait forever.
+
+In MATLAB, to specify a 3 second timeout:
+
+    >> msg = py.matlab_udp.receive(5005, 3);
+
+If a UDP message is not received within the timeout, the return value is:
+
+    msg = 
+      Python dict with no properties.
+        {'timeout_occurred': True, 'timeout_sec': 3.0}
+
+In Python, to specify a 3 second timeout:
+
+    >>> matlab_udp.receive(5005, 3)
+    
+If a UDP message is not received within the timeout, the return value is:
+
+    {'timeout_occurred': True, 'timeout_sec': 3.0}
+ 
 ## Running from Linux Command Line
 
 To send a message via UDP from a Linux terminal using the ```matlab_udp``` module, use the ```udp_send.py``` script.
@@ -115,4 +138,12 @@ Then, send a message from another Linux terminal using:
 The terminal running ```udp_rx.py``` will show:
 
     Received UDP from 192.168.1.12:47185 Hello
+
+To specify a receive timeout
+
+    $ python udp_rx.py 5005 --timeout_sec 3
+
+If a UDP message is not received within the timeout, the terminal will show is:
+
+    Timeout occurred.
 
