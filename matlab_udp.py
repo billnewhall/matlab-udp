@@ -45,20 +45,19 @@ def send(udp_ip, udp_port, udp_msg):
     udp_port = int(udp_port)
 
     # print("Creating socket")
-    sock = socket.socket(socket.AF_INET,    # Internet
-                        socket.SOCK_DGRAM)  # UDP
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
 
-    # print("Socket created")
+        # print("Socket created")
 
-    # myhostname = socket.gethostname()
-    # print("My hostname is {}".format(myhostname))
-    # print("My ip is {}".format(socket.gethostbyname(myhostname)))
+        # myhostname = socket.gethostname()
+        # print("My hostname is {}".format(myhostname))
+        # print("My ip is {}".format(socket.gethostbyname(myhostname)))
 
-    # print("Sending UDP to {}:{} from {}".format(udp_ip, udp_port, udp_ip))
+        # print("Sending UDP to {}:{} from {}".format(udp_ip, udp_port, udp_ip))
 
-    message = udp_msg
-    num_bytes_sent = sock.sendto(message.encode('utf-8'), (udp_ip, udp_port))
-
+        message = udp_msg
+        num_bytes_sent = sock.sendto(message.encode('utf-8'), (udp_ip, udp_port))
+        
     # print("Sent {} UDP bytes to {}:{}  {}".format(num_bytes_sent, udp_ip, udp_port, udp_msg))
     return float(num_bytes_sent)
 
